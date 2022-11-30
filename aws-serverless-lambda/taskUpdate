@@ -7,16 +7,28 @@ exports.handler = async (event, context) => {
     let responseBody = ""
     let statusCode = 0
 
-    let {id,taskname} = JSON.parse(event.body)
+    let {hourEachDay,currentProgress, lastFinishDate, id,taskName,taskDetail,startDate, endDate,totalHours, timeSection,quantity,quantifier} = JSON.parse(event.body)
 
     const params={
         TableName:"Tasks",
         Key:{
-            id:id
+            PK:id,
+            SK:"task"
         },
-        UpdateExpression:"set taskName = :n",
+        UpdateExpression:"SET hourEachDay = :h, lastFinishDate = :l, currentProgress = :cp, taskName = :tn, taskDetail = :td, startDate = :sd, endDate = :ed, totalHours = :h, timeSection = :ts, quantity = :q, quantifier = :qf",
         ExpressionAttributeValues:{
-            ":n": taskname
+            ":h":hourEachDay,
+            ":l": lastFinishDate,
+            ":cp": currentProgress,
+            ":tn": taskName,
+            ":td":taskDetail,
+            ":sd": startDate,
+            ":ed": endDate,
+            ":h": totalHours,
+            ":ts": timeSection,
+            ":q":quantity,
+            ":qf":quantifier,
+            
         },
         ReturnValues: "UPDATED_NEW"
     };
@@ -34,7 +46,8 @@ exports.handler = async (event, context) => {
     let response={
         statusCode:statusCode,
         headers:{
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin":"*"
         },
         body:responseBody
 

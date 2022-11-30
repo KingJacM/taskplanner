@@ -6,16 +6,18 @@ exports.handler = async (event, context) => {
     let documentClient = new AWS.DynamoDB.DocumentClient();
     let responseBody = ""
     let statusCode = 0
+    const {id} = event.pathParameters
 
     const params={
         TableName:"Tasks",
-        FilterExpression:"contains(SK,:sk)",
+        KeyConditionExpression:"PK = :pk AND begins_with(SK, :sk)",
         ExpressionAttributeValues:{
-            ":sk": "task"
+            ":pk":id,
+            ":sk": "milestone"
         }
     }
     try{
-        const data = await documentClient.scan(params).promise();
+        const data = await documentClient.query(params).promise();
         responseBody = JSON.stringify(data.Items)
         statusCode=200
 

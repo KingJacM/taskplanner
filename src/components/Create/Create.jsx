@@ -18,7 +18,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import differenceInDays from "date-fns/differenceInDays";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -39,6 +38,10 @@ export default function Create() {
   const [disabled, setDisabled] = useState(false);
   const [hour, setHour] = useState(1);
   const [alert, setAlert] = useState("");
+  const [quantity, setQuantity] = useState(null);
+  const [quantifier, setQuantifier] = useState("units");
+  const [quantityError, setQuantityError] = useState(false);
+  const [quantifierError, setQuantifierError] = useState(false);
 
   let navigate = useNavigate();
 
@@ -70,8 +73,8 @@ export default function Create() {
 
     //end date before start dat
     else if (
-      differenceInCalendarDays(new Date(endValue), new Date(startValue)) <0
-) {
+      differenceInCalendarDays(new Date(endValue), new Date(startValue)) < 0
+    ) {
       setStartError(true);
       setEndError(true);
       setAlert("End date cannot be before start date");
@@ -88,9 +91,16 @@ export default function Create() {
           endDate: endValue,
           totalHours:
             hour *
-            (differenceInCalendarDays(new Date(endValue), new Date(startValue)) + 1),
+            (differenceInCalendarDays(
+              new Date(endValue),
+              new Date(startValue)
+            ) +
+              1),
           timeSection: category,
           lastFinishDate: "",
+          quantity: quantity,
+          quantifier: quantifier,
+          hourEachDay: hour,
         })
         .then(() => navigate("/"))
         .catch((err) => console.log(err));
@@ -127,7 +137,6 @@ export default function Create() {
             multiline
             rows={4}
             fullWidth
-            required
             error={detailsError}
           />
           \<InputLabel id="hour">Hours Each Day</InputLabel>
@@ -142,6 +151,22 @@ export default function Create() {
               <MenuItem value={value}>{value}</MenuItem>
             ))}
           </Select>
+          <TextField
+            onChange={(e) => setQuantity(e.target.value)}
+            label="quantity (in total)"
+            variant="outlined"
+            color="secondary"
+            error={quantityError}
+          />
+          <TextField
+            onChange={(e) => setQuantifier(e.target.value)}
+            label="quantifier"
+            variant="outlined"
+            color="secondary"
+            required
+            error={quantifierError}
+          />
+          <br></br>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Start Date"

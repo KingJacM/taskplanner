@@ -7,12 +7,13 @@ exports.handler = async (event, context) => {
     let responseBody = ""
     let statusCode = 0
 
-    const id = event.pathParameters
+    const {id} = event.pathParameters
 
     const params={
         TableName:"Tasks",
         Key:{
-            id:id
+            PK:id,
+            SK:"task"
         }
     }
     try{
@@ -29,7 +30,8 @@ exports.handler = async (event, context) => {
     let response={
         statusCode:statusCode,
         headers:{
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin":"*"
         },
         body:responseBody
 

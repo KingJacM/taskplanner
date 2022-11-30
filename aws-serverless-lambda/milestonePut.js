@@ -6,23 +6,17 @@ exports.handler = async (event, context) => {
     let documentClient = new AWS.DynamoDB.DocumentClient();
     let responseBody = ""
     let statusCode = 0
-    let {taskName, taskDetail,startDate,endDate,totalHours,timeSection,quantity,quantifier} = JSON.parse(event.body)
+    let {taskID, milestoneName, milestoneDetail, deadline,expectedProgress} = JSON.parse(event.body)
 
     const params={
         TableName:"Tasks",
         Item:{
-            PK:crypto.randomUUID(),
-            SK:"task",
-            taskName: taskName,
-            taskDetail:taskDetail,
-            startDate: startDate,
-            endDate: endDate,
-            currentProgress: 0,
-            totalHours: totalHours,
-            timeSection: timeSection,
-            lastFinishDate:"",
-            quantity:quantity,
-            quantifier:quantifier
+            PK:taskID,
+            SK:"milestone_"+milestoneName,
+            milestoneName: milestoneName,
+            milestoneDetail:milestoneDetail,
+            deadline:deadline,
+            expectedProgress:expectedProgress
             
         }
     }
