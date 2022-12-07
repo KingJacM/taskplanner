@@ -9,41 +9,107 @@ const columns = [
  
   {
     field: 'id',
-    headerName: 'Task Name',
+    headerName: 'ID',
+    width: 150,
+    
+  },
+  {
+    field: 'name',
+    headerName: 'Name',
     width: 150,
     editable: true,
   },
   {
-    field: 'detail',
-    headerName: 'Task Detail',
-    width: 150,
+    field: 'countries',
+    headerName: 'Countries',
+   
+    width: 110,
     editable: true,
-  },
-  {
-    field: 'startDate',
-    headerName: 'Start Date',
+  },{
+    field: 'gender',
+    headerName: 'Gender',
    
     width: 110,
     editable: true,
   },
   {
-    field: 'finishDate',
-    headerName: 'Finish Date',
+    field: 'dob',
+    headerName: 'Date Of Birth',
+    width: 160,
+    editable: true,
+  },
+  {
+    field: 'truePositiveCount',
+    headerName: 'True positive count',
     width: 160,
     
   },
-//   {
-//     field: 'hourEachDay',
-//     headerName: 'hours Each day',
-//     width: 160,
+  {
+    field: 'createdDateTimeISO',
+    headerName: 'createdDateTimeISO',
+    width: 160,
     
-//   },
+  },
+  {
+    field: 'lastUpdatedDateTimeISO',
+    headerName: 'lastUpdatedDateTimeISO',
+    width: 160,
+    
+  }
 ];
 
 
 export default function Grid() {
 
-    const [rows, setRows] = useState([])
+    const [rows, setRows] = useState([
+      {
+        name: "Boyko Borissov",
+        countries: [
+          "US"
+        ],
+        dob: "1994-08-22",
+        gender: "male",
+        id: "ABC4043",
+        truePositiveCount: 0,
+        createdDateTimeISO: "2021-10-05T10:10:08.270Z",
+        lastUpdatedDateTimeISO: "2021-10-05T10:10:08.270Z"
+      },
+      {
+        name: "Alice Somebody",
+        countries: [
+          "NZ"
+        ],
+        dob: "1999-08-22",
+        gender: "female",
+        id: "ABC4143",
+        truePositiveCount: 2,
+        createdDateTimeISO: "2021-11-05T10:10:08.270Z",
+        lastUpdatedDateTimeISO: "2021-12-05T10:10:08.270Z"
+      },
+      {
+        name: "Bob Bo",
+        countries: [
+          "CN"
+        ],
+        dob: "1984-08-22",
+        gender: "male",
+        id: "ABC1243",
+        truePositiveCount: 0,
+        createdDateTimeISO: "2021-10-15T10:10:08.270Z",
+        lastUpdatedDateTimeISO: "2021-11-05T10:10:08.270Z"
+      },{
+        name: "Steve Dragonov",
+        countries: [
+          "AUS"
+        ],
+        dob: "1980-08-22",
+        gender: "male",
+        id: "ABC4343",
+        truePositiveCount: 4,
+        createdDateTimeISO: "2021-10-15T10:10:08.270Z",
+        lastUpdatedDateTimeISO: "2021-12-05T10:10:08.270Z"
+      }
+    ])
 
     const insertRows = (note)=>{
         let newrow = {
@@ -60,31 +126,32 @@ export default function Grid() {
 
     }
 
-    useEffect(() => {
-        async function fetchTasks() {
-          await axios
-            .get(`${config.api.invokeUrl}/tasks`)
-            .then(function (response) {
-              console.log(response.data);
-            //   setRows(response.data)
+    // useEffect(() => {
+    //     async function fetchTasks() {
+    //       await axios
+    //         .get(`${config.api.invokeUrl}/tasks`)
+    //         .then(function (response) {
+    //           console.log(response.data);
+    //         //   setRows(response.data)
               
            
 
-              response.data.forEach((note) => {insertRows(note)});
+    //           response.data.forEach((note) => {insertRows(note)});
             
-            });
-        }
+    //         });
+    //     }
     
-        fetchTasks();
-      }, []);
+    //     fetchTasks();
+    //   }, []);
 
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ margin:"auto", height: 400, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
+        checkboxSelection //import checkbox selection function
         
       />
     </Box>
